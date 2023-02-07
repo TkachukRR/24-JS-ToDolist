@@ -1,0 +1,19 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#toDoBoard {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.25em;
+  color: #252525;
+}
+
+.container {
+  width: 1200px;
+
+  margin: 0 auto;
+}
