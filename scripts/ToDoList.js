@@ -22,7 +22,10 @@ export class ToDoList {
   }
 
   removeTask(index) {
-    this.#tasks.splice(index, 1);
+    this.#tasks = [
+      ...this.#tasks.slice(0, index),
+      ...this.#tasks.slice(index + 1),
+    ];
   }
 
   render() {
