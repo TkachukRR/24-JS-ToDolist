@@ -3,6 +3,7 @@ import {
   INPUT_PLACEHOLDER_TEXT,
   INPUT_LABLE,
   INPUT_ADD_BUTTON_TEXT,
+  INPUT_CHECK_REGEXP,
 } from './constants.js';
 
 export class ToDoList {
@@ -12,6 +13,14 @@ export class ToDoList {
   constructor() {
     this.#placeForBord = document.querySelector('#toDoBoard');
     this.render();
+
+    const input = this.#placeForBord.querySelector('[name="newTaskText"]');
+
+    input.addEventListener('input', (event) => {
+      !this.validate(event.target.value, INPUT_CHECK_REGEXP)
+        ? input.classList.add('bordered--red')
+        : input.classList.remove('bordered--red');
+    });
   }
 
   getTasks() {
@@ -83,5 +92,9 @@ export class ToDoList {
         className && className + '__button'
       }' type="button">${INPUT_ADD_BUTTON_TEXT}</button>
     </form>`;
+  }
+
+  validate(inputString, regExp) {
+    return !inputString || inputString.replace(regExp, '') === inputString;
   }
 }

@@ -18,9 +18,18 @@
   margin: 0 auto;
 }
 
+.newTaskForm__input {
+  padding: 0.25em;
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  color: #252525;
+}
+
 .bordered--red {
   border-color: red;
   outline: red;
+  color: red;
 }
 
 .backdrop {
