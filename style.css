@@ -130,3 +130,7 @@ button {
   font-size: 1em;
   color: #252525;
 }
+
+ul {
+  list-style: none;
+}

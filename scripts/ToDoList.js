@@ -86,7 +86,10 @@ export class ToDoList {
     const items = array
       .map(
         (item) =>
-          `<li class='${className && className + '__item'}'>${item.task}</li>`
+          `<li class='${className && className + '__item'}'>
+          <input type="checkbox" name="" value="" />
+          ${item.task}
+          </li>`
       )
       .join('');
     return `<ul class='${className && className + '__list'}'>${items}</ul>`;
