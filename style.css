@@ -52,8 +52,6 @@
 .modal {
   position: absolute;
 
-  width: 280px;
-
   top: 50%;
   left: 50%;
 
@@ -121,4 +119,14 @@
 
 button {
   padding: 0.5em;
+  margin: 0.5em;
+}
+
+.modal__content input {
+  padding: 0.25em;
+  margin: 0.25em;
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  color: #252525;
 }
