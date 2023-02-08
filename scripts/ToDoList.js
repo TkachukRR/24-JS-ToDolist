@@ -115,20 +115,19 @@ export class ToDoList {
   }
 
   onEnterBtn(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (this.validate(event.target.value, INPUT_CHECK_REGEXP)) {
-        this.addTask({
-          task: event.target.value,
-          date: {
-            created: Date.now(),
-            expiration: Date.now() + BASE_DAYS_FOR_TASK * 24 * 3600 * 1000,
-          },
-        });
-        this.rerenderTaskList();
-        event.target.value = '';
-      }
-    }
+    if (event.key !== 'Enter') return;
+    if (!this.validate(event.target.value, INPUT_CHECK_REGEXP)) return;
+    event.preventDefault();
+
+    this.addTask({
+      task: event.target.value,
+      date: {
+        created: Date.now(),
+        expiration: Date.now() + BASE_DAYS_FOR_TASK * 24 * 3600 * 1000,
+      },
+    });
+    this.rerenderTaskList();
+    event.target.value = '';
   }
 
   onAddBtn(event) {
@@ -218,58 +217,55 @@ export class ToDoList {
   }
 
   onModalEnterBtn(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (this.validate(event.target.value, INPUT_CHECK_REGEXP)) {
-        const taskText = this.#placeForBord.querySelector(
-          '[name="newTaskText"]'
-        ).value;
-        const createdDate = this.#placeForBord.querySelector(
-          '[name="createdDate"]'
-        ).value;
-        const expirationDate = this.#placeForBord.querySelector(
-          '[name="expirationDate"]'
-        ).value;
+    if (event.key !== 'Enter') return;
+    if (!this.validate(event.target.value, INPUT_CHECK_REGEXP)) return;
 
-        this.addTask({
-          task: taskText,
-          date: {
-            created: new Date(createdDate).getTime(),
-            expiration: new Date(expirationDate).getTime(),
-          },
-        });
-        event.target.value = '';
-      }
-    }
+    event.preventDefault();
+
+    const taskText = this.#placeForBord.querySelector(
+      '[name="newTaskText"]'
+    ).value;
+    const createdDate = this.#placeForBord.querySelector(
+      '[name="createdDate"]'
+    ).value;
+    const expirationDate = this.#placeForBord.querySelector(
+      '[name="expirationDate"]'
+    ).value;
+
+    this.addTask({
+      task: taskText,
+      date: {
+        created: new Date(createdDate).getTime(),
+        expiration: new Date(expirationDate).getTime(),
+      },
+    });
+    event.target.value = '';
   }
 
   onModalAddBtn(event) {
-    if (
-      event.target.textContent === MODAL_ADD_BUTTON_TEXT &&
-      event.target.tagName === 'BUTTON'
-    ) {
-      event.preventDefault();
-      if (this.validate(event.target.value, INPUT_CHECK_REGEXP)) {
-        const taskText = this.#placeForBord.querySelector(
-          '[name="newTaskText"]'
-        ).value;
-        const createdDate = this.#placeForBord.querySelector(
-          '[name="createdDate"]'
-        ).value;
-        const expirationDate = this.#placeForBord.querySelector(
-          '[name="expirationDate"]'
-        ).value;
+    if (event.target.textContent !== MODAL_ADD_BUTTON_TEXT) return;
+    if (event.target.tagName !== 'BUTTON') return;
+    if (!this.validate(event.target.value, INPUT_CHECK_REGEXP)) return;
+    event.preventDefault();
 
-        this.addTask({
-          task: taskText,
-          date: {
-            created: new Date(createdDate).getTime(),
-            expiration: new Date(expirationDate).getTime(),
-          },
-        });
-        this.#placeForBord.querySelector('[name="newTaskText"]').value = '';
-      }
-    }
+    const taskText = this.#placeForBord.querySelector(
+      '[name="newTaskText"]'
+    ).value;
+    const createdDate = this.#placeForBord.querySelector(
+      '[name="createdDate"]'
+    ).value;
+    const expirationDate = this.#placeForBord.querySelector(
+      '[name="expirationDate"]'
+    ).value;
+
+    this.addTask({
+      task: taskText,
+      date: {
+        created: new Date(createdDate).getTime(),
+        expiration: new Date(expirationDate).getTime(),
+      },
+    });
+    this.#placeForBord.querySelector('[name="newTaskText"]').value = '';
   }
 
   onModalCancelBtn(event) {
