@@ -42,8 +42,6 @@ export class ToDoList {
   }
 
   render() {
-    console.log(this.getTasks());
-
     const list = this.makeTitledListMarkUpWithClass(
       TASK_LIST_TITLE,
       this.getTasks(),
@@ -54,8 +52,6 @@ export class ToDoList {
       'newTaskForm',
       INPUT_LABLE
     );
-    console.log(list);
-
     this.#placeForBord.innerHTML = '';
 
     this.#placeForBord.insertAdjacentHTML('beforeend', list);
@@ -132,7 +128,6 @@ export class ToDoList {
         this.rerenderTaskList();
         event.target.value = '';
       }
-      console.log(this.getTasks());
     }
   }
 
@@ -203,8 +198,6 @@ export class ToDoList {
   }
 
   addModalListeners() {
-    console.log('addEventListeners');
-
     const modal = this.#placeForBord.querySelector('.modal');
     const modalClose = modal.querySelector('.modal__closed');
     const modalInput = modal.querySelector('[data-action="newTaskText"]');
@@ -219,7 +212,6 @@ export class ToDoList {
   }
 
   onModalClose(event) {
-    console.log('onModalClose');
     this.render();
     this.addEventListeners();
     return;
@@ -229,9 +221,6 @@ export class ToDoList {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (this.validate(event.target.value, INPUT_CHECK_REGEXP)) {
-        console.log(event.target);
-        console.log(this.#placeForBord);
-
         const taskText = this.#placeForBord.querySelector(
           '[name="newTaskText"]'
         ).value;
