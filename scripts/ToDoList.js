@@ -4,6 +4,7 @@ import {
   INPUT_LABLE,
   INPUT_ADD_BUTTON_TEXT,
   INPUT_CHECK_REGEXP,
+  BASE_DAYS_FOR_TASK,
 } from './constants.js';
 
 export class ToDoList {
@@ -20,6 +21,21 @@ export class ToDoList {
       !this.validate(event.target.value, INPUT_CHECK_REGEXP)
         ? input.classList.add('bordered--red')
         : input.classList.remove('bordered--red');
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (this.validate(event.target.value, INPUT_CHECK_REGEXP)) {
+          this.addTask({
+            task: input.value,
+            date: {
+              created: Date.now(),
+              expiration: Date.now() + BASE_DAYS_FOR_TASK * 24 * 3600 * 1000,
+            },
+          });
+        }
+      }
     });
   }
 
