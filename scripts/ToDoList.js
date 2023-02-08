@@ -115,8 +115,10 @@ export class ToDoList {
   }
 
   onEnterBtn(event) {
-    if (event.key !== 'Enter') return;
-    if (!this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS))
+    if (
+      event.key !== 'Enter' ||
+      !this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS)
+    )
       return;
     event.preventDefault();
 
@@ -218,8 +220,10 @@ export class ToDoList {
   }
 
   onModalEnterBtn(event) {
-    if (event.key !== 'Enter') return;
-    if (!this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS))
+    if (
+      event.key !== 'Enter' ||
+      !this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS)
+    )
       return;
 
     event.preventDefault();
@@ -245,9 +249,11 @@ export class ToDoList {
   }
 
   onModalAddBtn(event) {
-    if (event.target.textContent !== MODAL_ADD_BUTTON_TEXT) return;
-    if (event.target.tagName !== 'BUTTON') return;
-    if (!this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS))
+    if (
+      (event.target.textContent !== MODAL_ADD_BUTTON_TEXT &&
+        event.target.tagName !== 'BUTTON') ||
+      !this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS)
+    )
       return;
     event.preventDefault();
 
