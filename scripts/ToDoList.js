@@ -3,7 +3,7 @@ import {
   INPUT_PLACEHOLDER_TEXT,
   INPUT_LABLE,
   INPUT_ADD_BUTTON_TEXT,
-  INPUT_CHECK_REGEXP,
+  INPUT_CHECK_RESTRICTED_CHARS,
   BASE_DAYS_FOR_TASK,
   MODAL_ADD_BUTTON_TEXT,
   MODAL_CANCEL_BUTTON_TEXT,
@@ -109,14 +109,15 @@ export class ToDoList {
   }
 
   onInputChange(event) {
-    !this.validate(event.target.value, INPUT_CHECK_REGEXP)
+    !this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS)
       ? event.target.classList.add('bordered--red')
       : event.target.classList.remove('bordered--red');
   }
 
   onEnterBtn(event) {
     if (event.key !== 'Enter') return;
-    if (!this.validate(event.target.value, INPUT_CHECK_REGEXP)) return;
+    if (!this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS))
+      return;
     event.preventDefault();
 
     this.addTask({
@@ -218,7 +219,8 @@ export class ToDoList {
 
   onModalEnterBtn(event) {
     if (event.key !== 'Enter') return;
-    if (!this.validate(event.target.value, INPUT_CHECK_REGEXP)) return;
+    if (!this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS))
+      return;
 
     event.preventDefault();
 
@@ -245,7 +247,8 @@ export class ToDoList {
   onModalAddBtn(event) {
     if (event.target.textContent !== MODAL_ADD_BUTTON_TEXT) return;
     if (event.target.tagName !== 'BUTTON') return;
-    if (!this.validate(event.target.value, INPUT_CHECK_REGEXP)) return;
+    if (!this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS))
+      return;
     event.preventDefault();
 
     const taskText = this.#placeForBord.querySelector(
