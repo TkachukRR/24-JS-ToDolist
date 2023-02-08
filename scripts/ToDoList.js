@@ -131,6 +131,7 @@ export class ToDoList {
         created: Date.now(),
         expiration: Date.now() + BASE_DAYS_FOR_TASK * 24 * 3600 * 1000,
       },
+      done: false,
     });
     this.rerenderTaskList();
     event.target.value = '';
@@ -247,6 +248,7 @@ export class ToDoList {
         created: new Date(createdDate).getTime(),
         expiration: new Date(expirationDate).getTime(),
       },
+      done: false,
     });
     event.target.value = '';
   }
@@ -276,6 +278,7 @@ export class ToDoList {
         created: new Date(createdDate).getTime(),
         expiration: new Date(expirationDate).getTime(),
       },
+      done: false,
     });
     this.#placeForBord.querySelector('[name="newTaskText"]').value = '';
   }
