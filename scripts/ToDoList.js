@@ -342,15 +342,21 @@ export class ToDoList {
 
     const itemId = event.target.parentNode.parentNode.dataset.itemid;
     const taskIndex = this.getTasks().findIndex((item) => item.id == itemId);
+    const taskText = this.getTasks()[taskIndex].task;
 
-    this.showEditModal(this.getTasks()[taskIndex].task);
+    this.showEditModal(taskText, taskIndex);
   }
 
-  showEditModal(itemID) {
-    const modal = this.makeModalMarkUp(this.makeEditMarkUp('editor', itemID));
+  showEditModal(taskText, taskIndex) {
+    const modal = this.makeModalMarkUp(this.makeEditMarkUp('editor', taskText));
 
     this.#placeForBord.innerHTML = '';
     this.#placeForBord.insertAdjacentHTML('beforeend', modal);
+
+    const input = this.#placeForBord.querySelector('[name="editTaskText"]');
+    input.focus();
+
+    this.addEditModalListeners(taskIndex);
   }
 
   makeEditMarkUp(className = '', innerText) {
@@ -371,5 +377,36 @@ export class ToDoList {
         }' type="button" data-action="cancelChanges">cancel</button>
       </span>
     </form>`;
+  }
+
+  addEditModalListeners(taskIndex) {
+    const modal = this.#placeForBord.querySelector('.modal');
+    const modalClose = modal.querySelector('.modal__closed');
+    const modalSaveBtn = modal.querySelector('[data-action="saveChanges"]');
+    const modalCancelBtn = modal.querySelector('[data-action="cancelChanges"]');
+    const previosTaskText = modal.querySelector('[name="editTaskText"]').value;
+
+    modalClose.addEventListener('click', this.onModalClose.bind(this));
+    modalSaveBtn.addEventListener(
+      'click',
+      this.onModalEditSave.bind(this, taskIndex)
+    );
+    modalCancelBtn.addEventListener(
+      'click',
+      this.onModalEditCancel.bind(this, previosTaskText)
+    );
+  }
+
+  onModalEditSave(taskIndex) {
+    const newTaskText = this.#placeForBord.querySelector(
+      '[name="editTaskText"]'
+    ).value;
+    this.getTasks()[taskIndex].task = newTaskText;
+    this.onModalClose();
+  }
+
+  onModalEditCancel(previosTaskText) {
+    this.#placeForBord.querySelector('[name="editTaskText"]').value =
+      previosTaskText;
   }
 }
