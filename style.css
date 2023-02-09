@@ -136,6 +136,17 @@ button {
   list-style: none;
 }
 
+.toDo__item,
+.toDo__item--checked {
+  padding: 0.25em;
+  margin-bottom: 0.25em;
+
+  border: 1px solid gray;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .toDo__item--checked {
   text-decoration: line-through;
   color: #bebebe;

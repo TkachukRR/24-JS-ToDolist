@@ -69,6 +69,7 @@ export class ToDoList {
     input.addEventListener('keydown', this.onEnterBtn.bind(this));
     addBtn.addEventListener('click', this.onAddBtn.bind(this));
     taskList.addEventListener('click', this.onCheckbox.bind(this));
+    taskList.addEventListener('click', this.odDeleteBtn.bind(this));
   }
 
   makeTitledListMarkUpWithClass(title, array, className = '') {
@@ -96,7 +97,7 @@ export class ToDoList {
           }
           }/>
           ${item.task}
-          <button class="btn__remove" type="button">&#10006</button>
+          <button class="btn__remove" type="button" data-action="removeItem">&#10006</button>
           </li>`
       )
       .join('');
@@ -320,5 +321,13 @@ export class ToDoList {
         this.rerenderTaskList();
       }
     });
+  }
+
+  odDeleteBtn(event) {
+    if (event.target.getAttribute('data-action') !== 'removeItem') return;
+
+    const itemId = event.target.parentNode.dataset.itemid;
+    this.setTasks(this.getTasks().filter((item) => item.id != itemId));
+    this.rerenderTaskList();
   }
 }
