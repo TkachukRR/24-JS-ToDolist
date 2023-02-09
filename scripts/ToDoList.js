@@ -92,12 +92,17 @@ export class ToDoList {
           `<li class='${
             className && className + '__item' + (item.done ? '--checked' : '')
           }' data-itemid="${item.id}">
-          <input type="checkbox" name="itemStatus" data-inputid="${item.id}" ${
-            item.done ? 'checked' : ''
-          }
-          }/>
-          ${item.task}
-          <button class="btn__remove" type="button" data-action="removeItem">&#10006</button>
+            <span>
+              <input type="checkbox" name="itemStatus" data-inputid="${
+                item.id
+              }" ${item.done ? 'checked' : ''}
+              }/>
+              ${item.task}
+            </span>
+            <span>
+              <button class="btn__edit" type="button" data-action="editItem">&#128393</button>
+              <button class="btn__remove" type="button" data-action="removeItem">&#10006</button>
+            </span>
           </li>`
       )
       .join('');
@@ -326,7 +331,7 @@ export class ToDoList {
   odDeleteBtn(event) {
     if (event.target.getAttribute('data-action') !== 'removeItem') return;
 
-    const itemId = event.target.parentNode.dataset.itemid;
+    const itemId = event.target.parentNode.parentNode.dataset.itemid;
     this.setTasks(this.getTasks().filter((item) => item.id != itemId));
     this.rerenderTaskList();
   }

@@ -157,6 +157,19 @@ button {
   padding: 0.25em;
 
   line-height: 1em;
+  font-size: 1em;
+
   background-color: #ff9494;
   color: #a02222;
+  border-radius: 0.5em;
+}
+
+.btn__edit {
+  float: right;
+  padding: 0.25em;
+
+  line-height: 1em;
+  font-size: 1em;
+  background-color: #fff494;
+  border-radius: 0.5em;
 }
