@@ -69,6 +69,7 @@ export class ToDoList {
       'button.newTaskForm__button'
     );
     const taskList = this.#placeForBord.querySelector('.toDo__list');
+    const cultivationButtons = this.#placeForBord.querySelector('.cultivation');
 
     input.addEventListener('input', this.onInputChange.bind(this));
     input.addEventListener('keydown', this.onEnterBtn.bind(this));
@@ -76,6 +77,13 @@ export class ToDoList {
     taskList.addEventListener('click', this.onCheckbox.bind(this));
     taskList.addEventListener('click', this.onDeleteBtn.bind(this));
     taskList.addEventListener('click', this.onEditBtn.bind(this));
+    cultivationButtons.addEventListener('click', this.onAll.bind(this));
+    cultivationButtons.addEventListener('click', this.onActive.bind(this));
+    cultivationButtons.addEventListener('click', this.onCompleted.bind(this));
+    cultivationButtons.addEventListener(
+      'click',
+      this.onClearCompleted.bind(this)
+    );
   }
 
   makeTitledListMarkUpWithClass(title, array, className = '') {
@@ -426,5 +434,25 @@ export class ToDoList {
           <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="clearCompleted">Clear completed</button></li>
         </ul>
       </div>`;
+  }
+
+  onAll() {
+    event.preventDefault();
+    if (event.target.textContent !== 'All') return;
+  }
+
+  onActive() {
+    event.preventDefault();
+    if (event.target.textContent !== 'Active') return;
+  }
+
+  onCompleted() {
+    event.preventDefault();
+    if (event.target.textContent !== 'Completed') return;
+  }
+
+  onClearCompleted() {
+    event.preventDefault();
+    if (event.target.textContent !== 'Clear completed') return;
   }
 }
