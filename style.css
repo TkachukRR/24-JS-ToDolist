@@ -179,3 +179,23 @@ button {
   display: flex;
   flex-direction: column;
 }
+
+.cultivation {
+  display: flex;
+  align-items: center;
+}
+
+.cultivation__title {
+  margin-right: 1em;
+}
+
+.cultivation__list {
+  display: flex;
+  list-style: none;
+}
+
+.cultivation__btn {
+  min-width: 10em;
+  font-size: 0.75em;
+  font-weight: 700;
+}

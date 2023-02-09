@@ -52,9 +52,14 @@ export class ToDoList {
       'newTaskForm',
       INPUT_LABLE
     );
+    const cultivationButtons = this.makeCultivationButtonsMarkup(
+      this.getTasks()
+    );
+
     this.#placeForBord.innerHTML = '';
 
     this.#placeForBord.insertAdjacentHTML('beforeend', list);
+    this.#placeForBord.insertAdjacentHTML('beforeend', cultivationButtons);
     this.#placeForBord.insertAdjacentHTML('beforeend', inputTask);
   }
 
@@ -408,5 +413,18 @@ export class ToDoList {
   onModalEditCancel(previosTaskText) {
     this.#placeForBord.querySelector('[name="editTaskText"]').value =
       previosTaskText;
+  }
+
+  makeCultivationButtonsMarkup(tasks) {
+    return `
+      <div class="cultivation">
+        <h3 class="cultivation__title">Items left: ${tasks.length}</h3>
+        <ul class="cultivation__list">
+          <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showAll">All</button></li>
+          <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showActive">Active</button></li>
+          <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showCompleted">Completed</button></li>
+          <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="clearCompleted">Clear completed</button></li>
+        </ul>
+      </div>`;
   }
 }
