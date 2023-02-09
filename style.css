@@ -7,18 +7,30 @@
 }
 
 #toDoBoard {
+  padding: 0.25em;
+
   font-family: 'Roboto', sans-serif;
   font-size: 1.25em;
   color: #252525;
+
+  border: 1px solid gray;
+  border-radius: 8px;
 }
 
 .container {
-  width: 1200px;
+  width: 840px;
 
   margin: 0 auto;
 }
 
+.newTaskForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .newTaskForm__input {
+  width: 600px;
   padding: 0.25em;
 
   font-family: 'Roboto', sans-serif;
@@ -30,6 +42,15 @@
   border-color: red;
   outline: red;
   color: red;
+}
+.newTaskForm__button {
+  line-height: 1em;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+.newTaskForm__button:active,
+.newTaskForm__button:hover {
+  outline: 2px solid yellow;
 }
 
 .backdrop {
@@ -132,7 +153,6 @@ button {
 }
 
 .toDo__list {
-  width: 50%;
   list-style: none;
 }
 
@@ -183,6 +203,7 @@ button {
 .cultivation {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .cultivation__title {
