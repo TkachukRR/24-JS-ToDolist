@@ -199,3 +199,15 @@ button {
   font-size: 0.75em;
   font-weight: 700;
 }
+
+.cultivation__btn.active {
+  background-color: #525252;
+  color: #bdbdbd;
+}
+
+.cultivation__btn.active:hover,
+.cultivation__btn.active:active,
+.cultivation__btn:hover,
+.cultivation__btn:active {
+  outline: 2px solid yellow;
+}

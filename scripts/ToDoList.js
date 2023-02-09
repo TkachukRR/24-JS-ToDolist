@@ -178,9 +178,15 @@ export class ToDoList {
     return !inputString || inputString.replace(regExp, '') === inputString;
   }
 
-  rerenderTaskList() {
-    const newTasks = this.makeListMarkUpWithClass(this.getTasks(), 'toDo');
+  rerenderTaskList(incommingTasks) {
+    let newTasks = null;
+    !!incommingTasks
+      ? ((newTasks = this.makeListMarkUpWithClass(incommingTasks, 'toDo')),
+        this.setItemsLeft(incommingTasks))
+      : ((newTasks = this.makeListMarkUpWithClass(this.getTasks(), 'toDo')),
+        this.setItemsLeft(this.getTasks()));
     const taskList = this.#placeForBord.querySelector('.toDo__list');
+
     taskList.innerHTML = newTasks;
   }
 
@@ -426,7 +432,7 @@ export class ToDoList {
   makeCultivationButtonsMarkup(tasks) {
     return `
       <div class="cultivation">
-        <h3 class="cultivation__title">Items left: ${tasks.length}</h3>
+        <h3 class="cultivation__title">Items left: <span data-val="itemsLeft">${tasks.length}</span></h3>
         <ul class="cultivation__list">
           <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showAll">All</button></li>
           <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showActive">Active</button></li>
@@ -444,6 +450,9 @@ export class ToDoList {
   onActive() {
     event.preventDefault();
     if (event.target.textContent !== 'Active') return;
+    event.target.classList.toggle('active');
+
+    this.rerenderTaskList(this.getTasks().filter((item) => item.done == false));
   }
 
   onCompleted() {
@@ -454,5 +463,10 @@ export class ToDoList {
   onClearCompleted() {
     event.preventDefault();
     if (event.target.textContent !== 'Clear completed') return;
+  }
+
+  setItemsLeft(tasks) {
+    this.#placeForBord.querySelector('[data-val="itemsLeft"]').textContent =
+      tasks.length;
   }
 }
