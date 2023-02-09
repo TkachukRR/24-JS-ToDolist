@@ -131,6 +131,11 @@ button {
   color: #252525;
 }
 
-ul {
+.toDo__list {
   list-style: none;
+}
+
+.toDo__item--checked {
+  text-decoration: line-through;
+  color: #bebebe;
 }

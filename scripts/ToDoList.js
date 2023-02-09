@@ -63,36 +63,43 @@ export class ToDoList {
     const addBtn = this.#placeForBord.querySelector(
       'button.newTaskForm__button'
     );
+    const taskList = this.#placeForBord.querySelector('.toDo__list');
 
     input.addEventListener('input', this.onInputChange.bind(this));
     input.addEventListener('keydown', this.onEnterBtn.bind(this));
     addBtn.addEventListener('click', this.onAddBtn.bind(this));
+    taskList.addEventListener('click', this.onCheckbox.bind(this));
   }
 
   makeTitledListMarkUpWithClass(title, array, className = '') {
     if (!array) console.error('wait for array');
-    if (!array.length) {
-      return `<h2 class='${className && className + '__title'}'>${title}</h2>
-      <ul class='${
-        className && className + '__list'
-      }'><li>SuperMan hasn't tasks.</li></ul>`;
-    }
 
-    return `<h2 class='${className && className + '__title'}'>${title}</h2>
-    ${this.makeListMarkUpWithClass(array, className)}`;
+    return `<h2 class='${className && className + '__title'}'>${title}
+    </h2><ul class='${className && className + '__list'}'>
+    ${this.makeListMarkUpWithClass(array, className)}
+    </ul>`;
   }
 
   makeListMarkUpWithClass(array, className = '') {
+    if (!array.length) {
+      return `<li>SuperMan hasn't tasks.</li>`;
+    }
+
     const items = array
       .map(
         (item) =>
-          `<li class='${className && className + '__item'}'>
-          <input type="checkbox" name="" value="" />
+          `<li class='${
+            className && className + '__item' + (item.done ? '--checked' : '')
+          }' data-itemid="${item.id}">
+          <input type="checkbox" name="itemStatus" data-inputid="${item.id}" ${
+            item.done ? 'checked' : ''
+          }
+          }/>
           ${item.task}
           </li>`
       )
       .join('');
-    return `<ul class='${className && className + '__list'}'>${items}</ul>`;
+    return items;
   }
 
   makeInputMarkUpWithPlaceholderWithClass(placeholder, className = '', lable) {
@@ -118,12 +125,13 @@ export class ToDoList {
   }
 
   onEnterBtn(event) {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
     if (
-      event.key !== 'Enter' ||
+      !event.target.value ||
       !this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS)
     )
       return;
-    event.preventDefault();
 
     this.addTask({
       task: event.target.value,
@@ -132,8 +140,10 @@ export class ToDoList {
         expiration: Date.now() + BASE_DAYS_FOR_TASK * 24 * 3600 * 1000,
       },
       done: false,
+      id: this.generateId(),
     });
     this.rerenderTaskList();
+
     event.target.value = '';
   }
 
@@ -224,13 +234,13 @@ export class ToDoList {
   }
 
   onModalEnterBtn(event) {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
     if (
-      event.key !== 'Enter' ||
+      !event.target.value ||
       !this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS)
     )
       return;
-
-    event.preventDefault();
 
     const taskText = this.#placeForBord.querySelector(
       '[name="newTaskText"]'
@@ -249,22 +259,26 @@ export class ToDoList {
         expiration: new Date(expirationDate).getTime(),
       },
       done: false,
+      id: this.generateId(),
     });
     event.target.value = '';
   }
 
   onModalAddBtn(event) {
     if (
-      (event.target.textContent !== MODAL_ADD_BUTTON_TEXT &&
-        event.target.tagName !== 'BUTTON') ||
-      !this.validate(event.target.value, INPUT_CHECK_RESTRICTED_CHARS)
+      event.target.textContent !== MODAL_ADD_BUTTON_TEXT &&
+      event.target.tagName !== 'BUTTON'
     )
       return;
     event.preventDefault();
+    const taskText = this.#placeForBord.querySelector('[name="newTaskText"]');
 
-    const taskText = this.#placeForBord.querySelector(
-      '[name="newTaskText"]'
-    ).value;
+    if (
+      !taskText.value ||
+      !this.validate(taskText.value, INPUT_CHECK_RESTRICTED_CHARS)
+    )
+      return;
+
     const createdDate = this.#placeForBord.querySelector(
       '[name="createdDate"]'
     ).value;
@@ -273,14 +287,15 @@ export class ToDoList {
     ).value;
 
     this.addTask({
-      task: taskText,
+      task: taskText.value,
       date: {
         created: new Date(createdDate).getTime(),
         expiration: new Date(expirationDate).getTime(),
       },
       done: false,
+      id: this.generateId(),
     });
-    this.#placeForBord.querySelector('[name="newTaskText"]').value = '';
+    taskText.value = '';
   }
 
   onModalCancelBtn(event) {
@@ -289,5 +304,20 @@ export class ToDoList {
       MODAL_CREATED_DATE_DEF_VAL;
     this.#placeForBord.querySelector('[name="expirationDate"]').value =
       MODAL_EXPIRATION_DATE_DEF_VAL;
+  }
+
+  generateId() {
+    return Math.floor(Math.random() * 100000);
+  }
+
+  onCheckbox(event) {
+    if (!event.target.hasAttribute('data-inputid')) return;
+
+    this.getTasks().map((task) => {
+      if (task.id == event.target.dataset.inputid) {
+        task.done = !task.done;
+        this.rerenderTaskList();
+      }
+    });
   }
 }
