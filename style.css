@@ -132,10 +132,20 @@ button {
 }
 
 .toDo__list {
+  width: 50%;
   list-style: none;
 }
 
 .toDo__item--checked {
   text-decoration: line-through;
   color: #bebebe;
+}
+
+.btn__remove {
+  float: right;
+  padding: 0.25em;
+
+  line-height: 1em;
+  background-color: #ff9494;
+  color: #a02222;
 }

@@ -96,6 +96,7 @@ export class ToDoList {
           }
           }/>
           ${item.task}
+          <button class="btn__remove" type="button">&#10006</button>
           </li>`
       )
       .join('');
