@@ -69,7 +69,8 @@ export class ToDoList {
     input.addEventListener('keydown', this.onEnterBtn.bind(this));
     addBtn.addEventListener('click', this.onAddBtn.bind(this));
     taskList.addEventListener('click', this.onCheckbox.bind(this));
-    taskList.addEventListener('click', this.odDeleteBtn.bind(this));
+    taskList.addEventListener('click', this.onDeleteBtn.bind(this));
+    taskList.addEventListener('click', this.onEditBtn.bind(this));
   }
 
   makeTitledListMarkUpWithClass(title, array, className = '') {
@@ -328,11 +329,47 @@ export class ToDoList {
     });
   }
 
-  odDeleteBtn(event) {
+  onDeleteBtn(event) {
     if (event.target.getAttribute('data-action') !== 'removeItem') return;
 
     const itemId = event.target.parentNode.parentNode.dataset.itemid;
     this.setTasks(this.getTasks().filter((item) => item.id != itemId));
     this.rerenderTaskList();
+  }
+
+  onEditBtn(event) {
+    if (event.target.getAttribute('data-action') !== 'editItem') return;
+
+    const itemId = event.target.parentNode.parentNode.dataset.itemid;
+    const taskIndex = this.getTasks().findIndex((item) => item.id == itemId);
+
+    this.showEditModal(this.getTasks()[taskIndex].task);
+  }
+
+  showEditModal(itemID) {
+    const modal = this.makeModalMarkUp(this.makeEditMarkUp('editor', itemID));
+
+    this.#placeForBord.innerHTML = '';
+    this.#placeForBord.insertAdjacentHTML('beforeend', modal);
+  }
+
+  makeEditMarkUp(className = '', innerText) {
+    return `
+    <form class='${className}' >
+      <label class='${className && className + '__lable'}' >
+        Edit task:
+        <input  class='${
+          className && className + '__input'
+        }' type="text" name="editTaskText" value="${innerText}"/>
+      </label>
+      <span>
+        <button  class='${
+          className && className + '__button'
+        }' type="button" data-action="saveChanges">save</button>
+        <button  class='${
+          className && className + '__button'
+        }' type="button" data-action="cancelChanges">cancel</button>
+      </span>
+    </form>`;
   }
 }

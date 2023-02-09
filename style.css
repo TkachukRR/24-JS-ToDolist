@@ -173,3 +173,9 @@ button {
   background-color: #fff494;
   border-radius: 0.5em;
 }
+
+.editor,
+.editor__lable {
+  display: flex;
+  flex-direction: column;
+}
