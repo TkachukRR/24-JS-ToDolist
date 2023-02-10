@@ -30,7 +30,17 @@
 }
 
 .newTaskForm__input {
-  width: 600px;
+  width: 450px;
+  padding: 0.25em;
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  color: #252525;
+}
+
+.newTaskForm__input__filter {
+  width: 200px;
+
   padding: 0.25em;
 
   font-family: 'Roboto', sans-serif;
@@ -244,10 +254,19 @@ button {
 
 .newTaskForm__popup {
   position: absolute;
+
+  width: 250px;
   top: 0em;
-  left: -2.5em;
+  left: 0px;
   background-color: #525252;
   border-radius: 0.25em;
+  display: flex;
+  justify-content: space-around;
+}
+
+.newTaskForm__popup button {
+  width: 100px;
+  font-weight: bold;
 }
 
 .hide {

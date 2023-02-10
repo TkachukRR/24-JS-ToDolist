@@ -134,6 +134,9 @@ export class ToDoList {
   makeInputMarkUpWithPlaceholderWithClass(placeholder, className = '', lable) {
     return `
     <form class='${className}' >
+    <input  class='${
+      className && className + '__input__filter'
+    }' type="text" name="newTaskText" placeholder='filer tasks'/>
       <label class='${className && className + '__lable'}' >
       <button type="button" class='${
         className && className + '__button'
