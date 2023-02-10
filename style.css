@@ -154,6 +154,7 @@ button {
 
 .toDo__list {
   list-style: none;
+  min-height: 300px;
 }
 
 .toDo__item,
@@ -231,4 +232,9 @@ button {
 .cultivation__btn:hover,
 .cultivation__btn:active {
   outline: 2px solid yellow;
+}
+
+.newTaskForm__lable {
+  display: flex;
+  align-items: center;
 }

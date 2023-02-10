@@ -73,6 +73,7 @@ export class ToDoList {
 
     input.addEventListener('input', this.onInputChange.bind(this));
     input.addEventListener('keydown', this.onEnterBtn.bind(this));
+    input.addEventListener('click', this.onSortBtn.bind(this));
     addBtn.addEventListener('click', this.onAddBtn.bind(this));
     taskList.addEventListener('click', this.onCheckbox.bind(this));
     taskList.addEventListener('click', this.onDeleteBtn.bind(this));
@@ -127,7 +128,9 @@ export class ToDoList {
     return `
     <form class='${className}' >
       <label class='${className && className + '__lable'}' >
-      ${lable}
+      <button type="button" class='${
+        className && className + '__button'
+      }' data-action="sortTasks"> ⇳</button>
       <input  class='${
         className && className + '__input'
       }' type="text" name="newTaskText" placeholder='${placeholder}'/>
@@ -600,4 +603,6 @@ export class ToDoList {
     const el = this.findElementBy(element);
     el.classList.remove(className);
   }
+
+  onSortBtn() {}
 }
