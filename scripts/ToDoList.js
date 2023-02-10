@@ -66,14 +66,20 @@ export class ToDoList {
   addEventListeners() {
     const input = this.#placeForBord.querySelector('[name="newTaskText"]');
     const addBtn = this.#placeForBord.querySelector(
-      'button.newTaskForm__button'
+      '[data-action="addDatedTask"]'
     );
+    const sortBtn = this.#placeForBord.querySelector(
+      '[data-action="sortTasks"]'
+    );
+    const sortPopup = this.#placeForBord.querySelector('.newTaskForm__popup');
     const taskList = this.#placeForBord.querySelector('.toDo__list');
     const cultivationButtons = this.#placeForBord.querySelector('.cultivation');
 
     input.addEventListener('input', this.onInputChange.bind(this));
     input.addEventListener('keydown', this.onEnterBtn.bind(this));
-    input.addEventListener('click', this.onSortBtn.bind(this));
+    sortBtn.addEventListener('click', this.onSortBtn.bind(this));
+    sortPopup.addEventListener('click', this.onByTextSort.bind(this));
+    sortPopup.addEventListener('click', this.onByDateSort.bind(this));
     addBtn.addEventListener('click', this.onAddBtn.bind(this));
     taskList.addEventListener('click', this.onCheckbox.bind(this));
     taskList.addEventListener('click', this.onDeleteBtn.bind(this));
@@ -107,12 +113,13 @@ export class ToDoList {
           `<li class='${
             className && className + '__item' + (item.done ? '--checked' : '')
           }' data-itemid="${item.id}">
-            <span>
+            <span class='${className && className + '__textC'}'>
               <input type="checkbox" name="itemStatus" data-inputid="${
                 item.id
               }" ${item.done ? 'checked' : ''}
               }/>
-              ${item.task}
+                ${item.task}
+                ${new Date(item.date.created).toLocaleString()}
             </span>
             <span>
               <button class="btn__edit" type="button" data-action="editItem">&#128393</button>
@@ -131,6 +138,10 @@ export class ToDoList {
       <button type="button" class='${
         className && className + '__button'
       }' data-action="sortTasks"> ⇳</button>
+      <div  class='${className && className + '__popup hide'}'>
+        <button  type="button" data-action="sortByText">Text</button>
+        <button type="button" data-action="sortByDate">Date</button>
+      </div>
       <input  class='${
         className && className + '__input'
       }' type="text" name="newTaskText" placeholder='${placeholder}'/>
@@ -138,7 +149,7 @@ export class ToDoList {
     
       <button  class='${
         className && className + '__button'
-      }' type="button">${INPUT_ADD_BUTTON_TEXT}</button>
+      }' type="button" data-action="addDatedTask">${INPUT_ADD_BUTTON_TEXT}</button>
     </form>`;
   }
 
@@ -604,5 +615,29 @@ export class ToDoList {
     el.classList.remove(className);
   }
 
-  onSortBtn() {}
+  onSortBtn() {
+    this.#placeForBord
+      .querySelector('.newTaskForm__popup')
+      .classList.remove('hide');
+  }
+
+  onByTextSort() {
+    if (event.target.textContent !== 'Text') return;
+    this.setTasks(this.getTasks().sort((a, b) => a.task - b.task));
+    this.rerenderTaskList();
+    this.#placeForBord
+      .querySelector('.newTaskForm__popup')
+      .classList.add('hide');
+  }
+
+  onByDateSort() {
+    if (event.target.textContent !== 'Date') return;
+    this.setTasks(
+      this.getTasks().sort((a, b) => a.date.created - b.date.created)
+    );
+    this.rerenderTaskList();
+    this.#placeForBord
+      .querySelector('.newTaskForm__popup')
+      .classList.add('hide');
+  }
 }

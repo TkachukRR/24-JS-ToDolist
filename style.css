@@ -233,8 +233,23 @@ button {
 .cultivation__btn:active {
   outline: 2px solid yellow;
 }
+.newTaskForm {
+  position: relative;
+}
 
 .newTaskForm__lable {
   display: flex;
   align-items: center;
+}
+
+.newTaskForm__popup {
+  position: absolute;
+  top: 0em;
+  left: -2.5em;
+  background-color: #525252;
+  border-radius: 0.25em;
+}
+
+.hide {
+  content-visibility: hidden;
 }
