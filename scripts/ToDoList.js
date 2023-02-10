@@ -72,6 +72,9 @@ export class ToDoList {
       '[data-action="sortTasks"]'
     );
     const sortPopup = this.#placeForBord.querySelector('.newTaskForm__popup');
+    const filterInput = this.#placeForBord.querySelector(
+      '.newTaskForm__input__filter'
+    );
     const taskList = this.#placeForBord.querySelector('.toDo__list');
     const cultivationButtons = this.#placeForBord.querySelector('.cultivation');
 
@@ -80,6 +83,7 @@ export class ToDoList {
     sortBtn.addEventListener('click', this.onSortBtn.bind(this));
     sortPopup.addEventListener('click', this.onByTextSort.bind(this));
     sortPopup.addEventListener('click', this.onByDateSort.bind(this));
+    filterInput.addEventListener('input', this.onFilterInput.bind(this));
     addBtn.addEventListener('click', this.onAddBtn.bind(this));
     taskList.addEventListener('click', this.onCheckbox.bind(this));
     taskList.addEventListener('click', this.onDeleteBtn.bind(this));
@@ -136,7 +140,7 @@ export class ToDoList {
     <form class='${className}' >
     <input  class='${
       className && className + '__input__filter'
-    }' type="text" name="newTaskText" placeholder='filer tasks'/>
+    }' type="text" placeholder='filer tasks'/>
       <label class='${className && className + '__lable'}' >
       <button type="button" class='${
         className && className + '__button'
@@ -213,17 +217,34 @@ export class ToDoList {
     );
 
     (isShowAllActive || (isShowActiveActive && isShowCompletedActive)) &&
-      (newTasks = this.makeListMarkUpWithClass(this.getTasks(), 'toDo'));
+      (newTasks = this.makeListMarkUpWithClass(
+        this.getFilterInputValue()
+          ? this.getTasks().filter((item) =>
+              item.task.includes(this.getFilterInputValue())
+            )
+          : this.getTasks(),
+        'toDo'
+      ));
+
     isShowActiveActive &&
       !isShowCompletedActive &&
       (newTasks = this.makeListMarkUpWithClass(
-        this.getTasks().filter((item) => item.done == false),
+        this.getFilterInputValue()
+          ? this.getTasks()
+              .filter((item) => item.done == false)
+              .filter((item) => item.task.includes(this.getFilterInputValue()))
+          : this.getTasks().filter((item) => item.done == false),
         'toDo'
       ));
+
     isShowCompletedActive &&
       !isShowActiveActive &&
       (newTasks = this.makeListMarkUpWithClass(
-        this.getTasks().filter((item) => item.done == true),
+        this.getFilterInputValue()
+          ? this.getTasks()
+              .filter((item) => item.done == false)
+              .filter((item) => item.task.includes(this.getFilterInputValue()))
+          : this.getTasks().filter((item) => item.done == true),
         'toDo'
       ));
 
@@ -642,5 +663,14 @@ export class ToDoList {
     this.#placeForBord
       .querySelector('.newTaskForm__popup')
       .classList.add('hide');
+  }
+
+  onFilterInput() {
+    this.rerenderTaskList();
+  }
+
+  getFilterInputValue() {
+    return this.#placeForBord.querySelector('.newTaskForm__input__filter')
+      .value;
   }
 }
