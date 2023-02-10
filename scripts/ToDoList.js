@@ -434,7 +434,7 @@ export class ToDoList {
       <div class="cultivation">
         <h3 class="cultivation__title">Items left: <span data-val="itemsLeft">${tasks.length}</span></h3>
         <ul class="cultivation__list">
-          <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showAll">All</button></li>
+          <li class="cultivation__item"><button type="button" class="cultivation__btn active" data-action="showAll">All</button></li>
           <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showActive">Active</button></li>
           <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="showCompleted">Completed</button></li>
           <li class="cultivation__item"><button type="button" class="cultivation__btn" data-action="clearCompleted">Clear completed</button></li>
@@ -445,28 +445,176 @@ export class ToDoList {
   onAll() {
     event.preventDefault();
     if (event.target.textContent !== 'All') return;
+
+    const isShowAllActive = this.hasElementClass(
+      '[data-action="showAll"]',
+      'active'
+    );
+    if (isShowAllActive) return;
+
+    const isShowActiveActive = this.hasElementClass(
+      '[data-action="showActive"]',
+      'active'
+    );
+    const isShowCompletedActive = this.hasElementClass(
+      '[data-action="showCompleted"]',
+      'active'
+    );
+
+    isShowActiveActive &&
+      this.removeElementClass('[data-action="showActive"]', 'active');
+
+    isShowCompletedActive &&
+      this.removeElementClass('[data-action="showCompleted"]', 'active');
+
+    this.addElementClass('[data-action="showAll"]', 'active');
+    this.rerenderTaskList();
   }
 
   onActive() {
     event.preventDefault();
     if (event.target.textContent !== 'Active') return;
-    event.target.classList.toggle('active');
 
-    this.rerenderTaskList(this.getTasks().filter((item) => item.done == false));
+    const isShowActiveActive = this.hasElementClass(
+      '[data-action="showActive"]',
+      'active'
+    );
+    const isShowAllActive = this.hasElementClass(
+      '[data-action="showAll"]',
+      'active'
+    );
+    const isShowCompletedActive = this.hasElementClass(
+      '[data-action="showCompleted"]',
+      'active'
+    );
+
+    switch (isShowActiveActive) {
+      case false:
+        this.addElementClass('[data-action="showActive"]', 'active');
+
+        isShowAllActive &&
+          this.removeElementClass('[data-action="showAll"]', 'active');
+
+        isShowCompletedActive
+          ? this.rerenderTaskList()
+          : this.rerenderTaskList(
+              this.getTasks().filter((item) => item.done == false)
+            );
+        break;
+
+      case true:
+        this.removeElementClass('[data-action="showActive"]', 'active');
+
+        isShowCompletedActive
+          ? this.rerenderTaskList(
+              this.getTasks().filter((item) => item.done == true)
+            )
+          : (this.addElementClass('[data-action="showAll"]', 'active'),
+            this.rerenderTaskList());
+        break;
+    }
   }
 
   onCompleted() {
     event.preventDefault();
     if (event.target.textContent !== 'Completed') return;
+
+    const isShowActiveActive = this.hasElementClass(
+      '[data-action="showActive"]',
+      'active'
+    );
+    const isShowAllActive = this.hasElementClass(
+      '[data-action="showAll"]',
+      'active'
+    );
+    const isShowCompletedActive = this.hasElementClass(
+      '[data-action="showCompleted"]',
+      'active'
+    );
+
+    switch (isShowCompletedActive) {
+      case false:
+        this.addElementClass('[data-action="showCompleted"]', 'active');
+
+        isShowAllActive &&
+          this.removeElementClass('[data-action="showAll"]', 'active');
+
+        isShowActiveActive
+          ? this.rerenderTaskList()
+          : this.rerenderTaskList(
+              this.getTasks().filter((item) => item.done == true)
+            );
+        break;
+
+      case true:
+        this.removeElementClass('[data-action="showCompleted"]', 'active');
+
+        isShowActiveActive
+          ? this.rerenderTaskList(
+              this.getTasks().filter((item) => item.done == false)
+            )
+          : (this.addElementClass('[data-action="showAll"]', 'active'),
+            this.rerenderTaskList());
+        break;
+    }
   }
 
   onClearCompleted() {
     event.preventDefault();
     if (event.target.textContent !== 'Clear completed') return;
+
+    const isShowActiveActive = this.hasElementClass(
+      '[data-action="showActive"]',
+      'active'
+    );
+    const isShowAllActive = this.hasElementClass(
+      '[data-action="showAll"]',
+      'active'
+    );
+    const isShowCompletedActive = this.hasElementClass(
+      '[data-action="showCompleted"]',
+      'active'
+    );
+
+    this.setTasks(this.getTasks().filter((item) => item.done == false));
+
+    (isShowAllActive || (isShowActiveActive && isShowCompletedActive)) &&
+      this.rerenderTaskList();
+
+    isShowActiveActive &&
+      !isShowCompletedActive &&
+      this.rerenderTaskList(
+        this.getTasks().filter((item) => item.done == false)
+      );
+
+    isShowCompletedActive &&
+      !isShowActiveActive &&
+      this.rerenderTaskList(
+        this.getTasks().filter((item) => item.done == true)
+      );
   }
 
   setItemsLeft(tasks) {
     this.#placeForBord.querySelector('[data-val="itemsLeft"]').textContent =
       tasks.length;
+  }
+
+  findElementBy(param) {
+    return this.#placeForBord.querySelector(param);
+  }
+
+  hasElementClass(element, className) {
+    const el = this.findElementBy(element);
+    return el.classList.contains(className);
+  }
+
+  addElementClass(element, className) {
+    const el = this.findElementBy(element);
+    el.classList.add(className);
+  }
+
+  removeElementClass(element, className) {
+    const el = this.findElementBy(element);
+    el.classList.remove(className);
   }
 }
