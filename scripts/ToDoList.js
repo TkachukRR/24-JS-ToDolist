@@ -178,16 +178,42 @@ export class ToDoList {
     return !inputString || inputString.replace(regExp, '') === inputString;
   }
 
-  rerenderTaskList(incommingTasks) {
+  rerenderTaskList() {
     let newTasks = null;
-    !!incommingTasks
-      ? ((newTasks = this.makeListMarkUpWithClass(incommingTasks, 'toDo')),
-        this.setItemsLeft(incommingTasks))
-      : ((newTasks = this.makeListMarkUpWithClass(this.getTasks(), 'toDo')),
-        this.setItemsLeft(this.getTasks()));
+
+    const isShowAllActive = this.hasElementClass(
+      '[data-action="showAll"]',
+      'active'
+    );
+    const isShowActiveActive = this.hasElementClass(
+      '[data-action="showActive"]',
+      'active'
+    );
+
+    const isShowCompletedActive = this.hasElementClass(
+      '[data-action="showCompleted"]',
+      'active'
+    );
+
+    (isShowAllActive || (isShowActiveActive && isShowCompletedActive)) &&
+      (newTasks = this.makeListMarkUpWithClass(this.getTasks(), 'toDo'));
+    isShowActiveActive &&
+      !isShowCompletedActive &&
+      (newTasks = this.makeListMarkUpWithClass(
+        this.getTasks().filter((item) => item.done == false),
+        'toDo'
+      ));
+    isShowCompletedActive &&
+      !isShowActiveActive &&
+      (newTasks = this.makeListMarkUpWithClass(
+        this.getTasks().filter((item) => item.done == true),
+        'toDo'
+      ));
+
     const taskList = this.#placeForBord.querySelector('.toDo__list');
 
     taskList.innerHTML = newTasks;
+    this.setItemsLeft();
   }
 
   makeModalMarkUp(innerMarkup) {
@@ -343,6 +369,7 @@ export class ToDoList {
     this.getTasks().map((task) => {
       if (task.id == event.target.dataset.inputid) {
         task.done = !task.done;
+
         this.rerenderTaskList();
       }
     });
@@ -494,25 +521,16 @@ export class ToDoList {
 
         isShowAllActive &&
           this.removeElementClass('[data-action="showAll"]', 'active');
-
-        isShowCompletedActive
-          ? this.rerenderTaskList()
-          : this.rerenderTaskList(
-              this.getTasks().filter((item) => item.done == false)
-            );
         break;
 
       case true:
         this.removeElementClass('[data-action="showActive"]', 'active');
 
-        isShowCompletedActive
-          ? this.rerenderTaskList(
-              this.getTasks().filter((item) => item.done == true)
-            )
-          : (this.addElementClass('[data-action="showAll"]', 'active'),
-            this.rerenderTaskList());
+        !isShowCompletedActive &&
+          this.addElementClass('[data-action="showAll"]', 'active');
         break;
     }
+    this.rerenderTaskList();
   }
 
   onCompleted() {
@@ -538,65 +556,30 @@ export class ToDoList {
 
         isShowAllActive &&
           this.removeElementClass('[data-action="showAll"]', 'active');
-
-        isShowActiveActive
-          ? this.rerenderTaskList()
-          : this.rerenderTaskList(
-              this.getTasks().filter((item) => item.done == true)
-            );
         break;
 
       case true:
         this.removeElementClass('[data-action="showCompleted"]', 'active');
 
-        isShowActiveActive
-          ? this.rerenderTaskList(
-              this.getTasks().filter((item) => item.done == false)
-            )
-          : (this.addElementClass('[data-action="showAll"]', 'active'),
-            this.rerenderTaskList());
+        !isShowActiveActive &&
+          this.addElementClass('[data-action="showAll"]', 'active');
         break;
     }
+    this.rerenderTaskList();
   }
 
   onClearCompleted() {
     event.preventDefault();
     if (event.target.textContent !== 'Clear completed') return;
 
-    const isShowActiveActive = this.hasElementClass(
-      '[data-action="showActive"]',
-      'active'
-    );
-    const isShowAllActive = this.hasElementClass(
-      '[data-action="showAll"]',
-      'active'
-    );
-    const isShowCompletedActive = this.hasElementClass(
-      '[data-action="showCompleted"]',
-      'active'
-    );
-
     this.setTasks(this.getTasks().filter((item) => item.done == false));
 
-    (isShowAllActive || (isShowActiveActive && isShowCompletedActive)) &&
-      this.rerenderTaskList();
-
-    isShowActiveActive &&
-      !isShowCompletedActive &&
-      this.rerenderTaskList(
-        this.getTasks().filter((item) => item.done == false)
-      );
-
-    isShowCompletedActive &&
-      !isShowActiveActive &&
-      this.rerenderTaskList(
-        this.getTasks().filter((item) => item.done == true)
-      );
+    this.rerenderTaskList();
   }
 
-  setItemsLeft(tasks) {
+  setItemsLeft() {
     this.#placeForBord.querySelector('[data-val="itemsLeft"]').textContent =
-      tasks.length;
+      this.getTasks().filter((item) => item.done == false).length;
   }
 
   findElementBy(param) {
